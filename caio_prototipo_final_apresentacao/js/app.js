@@ -1,6 +1,6 @@
 var scotchApp = angular.module('scotchApp',['ngRoute']); //estanciando objeto angular 
 
-	scotchApp.config(function($routeProvider){ //Ojeto angular recebe e inicia uma função...
+	scotchApp.config(function($routeProvider){ //Ojeto angular recebe função e inicia...
 		$routeProvider
 
 			//Condição...
@@ -28,20 +28,21 @@ var scotchApp = angular.module('scotchApp',['ngRoute']); //estanciando objeto an
 
 				controller  : 'mainController'	
 
-			});
-			
-			
+			});		
 	});
 
 	scotchApp.controller('mainController', function($scope) {
 
-        $('#stop').hide();		
+        $('#stop').hide(); //Oculta Botão Pausa Gravação
+        $('#MensagemCamposInvalidos').hide(); //Oculta Mensagem de Campos Inválidos	
+
+        // setTimeout( function ( ) { alert( "moo" ); }, 10000 );	
 
 	});
 
 	scotchApp.controller('listController', function($scope) {
 
-		mostraGravacao();	
+		mostraGravacao(); //Chama função para exibir as gravações	
 
 	});
 

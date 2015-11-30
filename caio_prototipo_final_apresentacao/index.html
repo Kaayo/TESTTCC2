@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="pt_br" ng-app="scotchApp">
+<head>
+  <meta charset="utf-8">
+  <title>Protótipo de Aplicativo de Agenda Tarefas com Gravação de Áudio</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="">
+  <meta name="author" content="">
+  
+  <meta name="format-detection" content="telephone=no" />
+  <meta name="msapplication-tap-highlight" content="no" />
+
+  <!-- Importações - Estilos CSS -->
+  <link href="bootstrap/css/bootstrap.css" rel="stylesheet">
+  <link href="css/style.css" rel="stylesheet">
+  <link href="css/styleGlossy.css" rel="stylesheet">
+  <link href="bootstrap/css/bootstrap-responsive.css" rel="stylesheet">
+
+  <!-- Importações JavaScript -->
+  <script type="text/javascript" src="js/auds.js"></script>
+  <script type="text/javascript" src="js/angular.js"></script> <!-- Angular JS-->
+  <script type="text/javascript" src="js/angular-route.js"></script> <!-- Angular JS-->
+  <script type="text/javascript" src="js/app.js"></script>
+
+  <script src="jquery/js/jquery-1.7.2.js"></script> <!-- JQuery-->
+  <script src="js/lib/recorder.js"></script>
+  <script src="js/recordLive.js"></script>
+
+  <!-- Importação - Google Fonts -->
+  <link href='https://fonts.googleapis.com/css?family=Black+Ops+One' rel='stylesheet' type='text/css'>
+  <link href='https://fonts.googleapis.com/css?family=Audiowide' rel='stylesheet' type='text/css'>
+</head>
+
+<body class="row">
+
+<!-- Notificação -->
+<div class="col-lg-12" id="pop">
+  <a href="" onclick="document.getElementById('pop').style.display='none';"><font style="color: red; font-family: 'Audiowide', cursive; font-size: 20px; ">Você Tem um Tarefa! <br/> Toque para Ouvir! <br/> [Fechar] <br/></font></a>
+</div>
+ 
+  <div id="menu_principal" ng-view>  <!-- Elemento HTML com extensão Angular JS -->  
+
+    <span id="Clock">00:00:00</span> <!-- Relógio em Funcionamento em segundo plano -->
+    
+    <script language="JavaScript"> 
+
+      var Elem = document.getElementById("Clock"); //Variável recebe o Elemento de id 'Clock' (Relógio)
+      
+      function Horario(){ 
+        var Hoje = new Date(); //Criando novo Objetivo do Tipo 'Data'
+        
+        var Horas = Hoje.getHours(); //Variável Horas recebe o horário a partir do objeto 'Data'  
+          
+        if(Horas < 10){ //Caso Horário seja inferior a 10 acrescenta o número '0' antes.
+            Horas = "0"+Horas; 
+      } 
+      
+      var Minutos = Hoje.getMinutes(); 
+          
+        if(Minutos < 10){ 
+            Minutos = "0"+Minutos; 
+      } 
+      
+      var Segundos = Hoje.getSeconds(); 
+      
+        if(Segundos < 10){ 
+            Segundos = "0"+Segundos; 
+      } 
+      
+      Elem.innerHTML = Horas+":"+Minutos+":"+Segundos; /*Horário retornado pelo JavaScript fica encapsulado dentro de um HTML interno (Devido ao innerHTML)*/
+      
+      console.log(Hoje.getUTCFullYear()+'-'+(Hoje.getMonth()+1)+'-'+Hoje.getDate()); //Exibe em forma de Texto o Ano, Mês e dia (ex: 2015-11-02)
+      console.log(Horas+":"+Minutos);// Exibe em forma de Texto Horas e Minutos (ex: 14:15)
+
+      var xyz = getGravacao(); //Variável recebe o Array com as Gravações
+      var dia = Hoje.getUTCFullYear()+'-'+ (Hoje.getMonth()+1) +'-'+Hoje.getDate(); //Variável recebe a Data (ex: 2015-08-15) 
+      var hhora = Horas+":"+Minutos+":"+Segundos; //Variável recebe o horário, incluíndo segundos (ex: 14:52:36)
+
+        
+        for (var i = xyz.length - 1; i >= 0; i--) { /*Loop FOR (decremento) - Vasculha as Gravações e suas */
+                                                    //respectivas horas e datas // 
+            
+          //Se uma gravação listada no Array possuir horário e data existente será emitido notificação   
+          if (xyz[i]['data'] === dia) {
+            if (xyz[i]['hora'] === hhora) {
+
+              $(xyz[i]['audio']).appendTo('#pop'); //Sintaxe JQuery - envia Gravação para elemento de id 'pop'
+              document.getElementById('pop').style.display='block';
+              console.log('NOTIFICAÇÃO EXIBIDA COM SUCESSO!'); //Mensagem de Texto (Console)
+            };
+
+          };
+        };
+    } 
+    window.setInterval("Horario()",1000); //Relógio recebe intervalo de 1000ms (1s) 
+  </script>
+
+  </div>
+</body>
+</html>
